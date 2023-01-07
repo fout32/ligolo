@@ -99,7 +99,7 @@ make build
 
 Для *localrelay*, вы можете оставить параметры по умолчанию. Он будет прослушивать каждый интерфейс на порту 5555 и ждать подключений от *ligolo* (`-relayserver` параметр).
 
-For *ligolo*, you must specify the IP address of the relay server (or your attack server) using the `-relayserver ip:port` parameter.
+Для *ligolo*, вы должны указать IP-адрес сервера ретрансляции (или вашего сервера атаки), используя `-relayserver ip:port` параметр.
 
 Вы можете использовать `-h` для помощи.
 
