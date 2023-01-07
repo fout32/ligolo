@@ -1,4 +1,4 @@
-# Ligolo : Reverse Tunneling made easy for pentesters, by pentesters
+# Ligolo : Простое обратное туннелирование для пентестеров, от пентестеров
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)](https://forthebadge.com)
@@ -7,56 +7,55 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-## Table of Contents
+## Содержание
 
-- [Introduction](#introduction)
-- [Use case](#use-case)
-- [Quick Demo](#quick-demo)
-- [Performance](#performance)
-- [Usage](#usage)
-  - [Setup / Compiling](#setup--compiling)
-  - [How to use?](#how-to-use)
+- [Вступление](#introduction)
+- [Пример использования](#use-case)
+- [Быстрая демонстрация](#quick-demo)
+- [Производительность](#performance)
+- [Использование](#usage)
+  - [Настройка / Компиляция](#setup--compiling)
+  - [Как использовать?](#how-to-use)
   - [TL;DR](#tldr)
-  - [Options](#options)
-- [Features](#features)
+  - [Опции](#options)
+- [Особенности](#features)
 - [To Do](#to-do)
-- [Licensing](#licensing)
+- [Лицензирование](#licensing)
 - [Credits](#credits)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Introduction
+## Вступление
 
-**Ligolo** is a *simple* and *lightweight* tool for establishing *SOCKS5* or *TCP* tunnels from a reverse connection in complete safety (TLS certificate with elliptical curve).
+**Ligolo** это * простой * и * легкий * инструмент для установления * SOCKS5 * или * TCP * туннелей из обратного соединения в полной безопасности (сертификат TLS с эллиптической кривой).
+Это сопоставимо с * Meterpreter* с * Autoroute + Socks4a*, но более стабильно и быстрее.
 
-It is comparable to *Meterpreter* with *Autoroute + Socks4a*, but more stable and faster.
+## Пример использования
 
-## Use case
+Вы скомпрометировали сервер Windows / Linux / Mac во время вашего внешнего аудита. Этот сервер расположен внутри локальной сети, и
+вы хотите установить соединения с другими компьютерами в этой сети.
 
-You compromised a Windows / Linux / Mac server during your external audit. This server is located inside a LAN network and
-you want to establish connections to other machines on this network.
+**Ligolo** может настроить туннель для доступа к ресурсам внутреннего сервера.
 
-**Ligolo** can setup a tunnel to access internal server's resources.
+## Быстрая демонстрация
 
-## Quick Demo
-
-Relay of a RDP connection using Proxychains (WAN).
+Ретрансляция RDP-соединения с использованием прокси-цепочек (WAN).
 
 ![RDP](img/rdesktop_example.gif)
 
-## Performance
+## Производительность
 
-Here is a screenshot of a speedtest between two 100mb/s hosts (ligolo / localrelay). Performance may vary depending on the system and network configuration.
+Вот скриншот теста скорости между двумя хостами со скоростью 100 Мбит/с (ligolo / localrelay). Производительность может варьироваться в зависимости от конфигурации системы и сети.
 
-![Speedtest](img/speedtest.png)
+![Проверка скорости](img/speedtest.png)
 
-## Usage
+## Использование
 
-### Setup / Compiling
+### Настройка / Компиляция
 
-Make sure *Go* is installed and working.
+Убедитесь, что * Go* установлен и работает.
 
-1. Get Ligolo and dependencies
+1. Получите Ligolo и зависимости
 
 ```
 cd `go env GOPATH`/src
@@ -65,64 +64,64 @@ cd ligolo
 make dep
 ```
 
-2. Generate self-signed TLS certificates (will be placed in the *certs* folder)
+2. Сгенерируйте самоподписанный TLS сертификат (будет помещен в *certs* папку)
 
 ```
 make certs TLS_HOST=example.com
 ```
 
-NOTE: You can also use your own certificates by using the `TLS_CERT` make option when calling *build*. Example: `make build-all TLS_CERT=certs/mycert.pem`.
+NOTE: Вы также можете использовать свои собственные сертификаты, используя `TLS_CERT` переменную окружения при вызове *build*. Пример: `make build-all TLS_CERT=certs/mycert.pem`.
 
-3. Build
+3. Сборка
 
-* 3.1. For all architectures
+* 3.1. Для всех архитектур
 
 ```
 make build-all
 ```
 
-* 3.2. (or) For the current architecture
+* 3.2. (или) Для текущей архитектуры
 
 ```
 make build
 ```
 
-### How to use?
+### Как использовать?
 
-*Ligolo* consists of two modules:
+*Ligolo* состоит из двух модулей:
 
 - localrelay
 - ligolo
 
-*Localrelay* is intended to be launched on the control server (the attacker server).
+*Localrelay* предназначен для запуска на сервере управления (сервере злоумышленника).
 
-*Ligolo* is the program to run on the target computer.
+*Ligolo* это программа для запуска на целевом компьютере.
 
-For *localrelay*, you can leave the default options. It will listen on every interface on port 5555 and wait for connections from *ligolo* (`-relayserver` parameter).
+Для *localrelay*, вы можете оставить параметры по умолчанию. Он будет прослушивать каждый интерфейс на порту 5555 и ждать подключений от *ligolo* (`-relayserver` параметр).
 
 For *ligolo*, you must specify the IP address of the relay server (or your attack server) using the `-relayserver ip:port` parameter.
 
-You can use the `-h` option for help.
+Вы можете использовать `-h` для помощи.
 
-Once the connection has been established between *Ligolo* and *LocalRelay*, a *SOCKS5* proxy will be set up on TCP port `1080` on the relay server (you can change the TCP address/port using the *-localserver* option).
+Как только будет установлено соединение между *Ligolo* и *LocalRelay*, прокси-сервер *SOCKS5* будет поднят на TCP-порт `1080` на relay сервере (вы можете изменить TCP-адрес/порт, используя опцию *-localserver*).
 
-After that, all you have to do is use your favorite tool (Proxychains for example), and explore the client's LAN network.
+После этого все, что вам нужно сделать, это использовать ваш любимый инструмент (например, Proxychains) и исследовать локальную сеть клиента.
 
 ### TL;DR
 
-On your attack server.
+На вашем атакующем сервере.
 
 ```
 ./bin/localrelay_linux_amd64
 ```
 
-On the compromise host.
+На скомпроментированом хосте.
 
 ```
 > ligolo_windows_amd64.exe -relayserver LOCALRELAYSERVER:5555
 ```
 
-Once the connection is established, set the following parameters on the ProxyChains config file (On the attack server):
+Как только соединение установлено, установите следующие параметры в конфигурационном файле ProxyChains (на атакующем сервере):
 
 ```
 [ProxyList]
@@ -139,50 +138,50 @@ $ proxychains nmap -sT 10.0.0.0/24 -p 80 -Pn -A
 $ proxychains rdesktop 10.0.0.123
 ```
 
-### Options
+### Опции
 
-*Localrelay* options:
+*Localrelay* опции:
 
 ```
-Usage of localrelay:
+Использование localrelay:
   -certfile string
-    	The TLS server certificate (default "certs/server.crt")
+    	Сертификат сервера TLS (по умолчанию "certs/server.crt")
   -keyfile string
-    	The TLS server key (default "certs/server.key")
+    	Ключ сервера TLS (по умолчанию "certs/server.key")
   -localserver string
-    	The local server address (your proxychains parameter) (default "127.0.0.1:1080")
+    	Адрес локального сервера (ваш параметр proxychains) (default "127.0.0.1:1080")
   -relayserver string
-    	The relay server listening address (the connect-back address) (default "0.0.0.0:5555")
+    	Адрес прослушивания сервера ретрансляции (обратный адрес для подключения) (default "0.0.0.0:5555")
 ```
 
-*Ligolo* options:
+*Ligolo* опции:
 
 ```
-Usage of ligolo:
+Использование ligolo:
   -autorestart
-    	Attempt to reconnect in case of an exception
+    	Попытка повторного подключения в случае ошибки
   -relayserver string
-    	The relay server (the connect-back address) (default "127.0.0.1:5555")
+    	Сервер ретрансляции (обратный адрес для подключения) (default "127.0.0.1:5555")
   -skipverify
-    	Skip TLS certificate pinning verification
+    	Пропустить проверку сертификата TLS
   -targetserver string
-    	The destination server (a RDP client, SSH server, etc.) - when not specified, Ligolo starts a socks5 proxy server
+    	Целевой сервер (RDP-клиент, SSH-сервер и т.д.) - если не указано, Ligolo запускает прокси-сервер socks5.
 ```
 
-## Features
+## Особенности
 
-- TLS 1.3 tunnel with TLS pinning
-- Multiplatforms (Windows / Linux / Mac / ...)
-- Multiplexing (1 TCP connection for all flows)
-- SOCKS5 proxy or simple relay
+- Туннель TLS 1.3 с поддержкой TLS
+- Мультиплатформенность (Windows / Linux / Mac / ...)
+- Мультиплексирование (1 TCP-соединение для всех потоков)
+- Прокси-сервер SOCKS5 или простая ретрансляция
 
 ## To Do
 
-- Better timeout handling
-- SOCKS5 UDP support
+- Улучшенная обработка тайм-аута
+- Поддержка SOCKS5 UDP
 - Implement mTLS
 
-## Licensing
+## Лицензирование
 
 GNU General Public License v3.0 (See LICENSING).
 
